@@ -12,7 +12,7 @@ function emitComment(id) {
         detail: `Noi dung comment c lesson ${id}`
       })
     )
-  }, 2000)
+  }, 1000)
 } 
 
 emitComment(1);
