@@ -1,53 +1,44 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 
 
+// useEffect 
+// 1. Cap nhat lai state
+// 2. Cap nhat lai DOM 
+// 3. Render lại UI
+// 4. gọi cleanup nếu dép thay đổi
+// 5. gọi useEffect callback
 
-const  lessons = [
-    {
-        id: 1,
-        name: 'Lesson 1'
-    },
-    {
-        id: 2,
-        name: 'Lesson 2'
-    },
-    {
-        id: 3,
-        name: 'Lesson 3'
-    },
-]
-
+//useLayoutEffect
+// 1. Cập nhật lại state
+// 2. Cập nhật DOM (mutated)
+// 3. Gọi cleanup nếu deps thay đổi (sync)
+// 4. Gọi useLayoutEffect callback (sync)
+// 5. Render lại UI
+ 
 
 function Content() {
-    const [lessonId, setLessonId] = useState(1)
-
-  
-    useEffect(() => {
-        const handleComment = ({ detail }) => {
-            console.log(detail)
-        }
     
-        
-        window.addEventListener(`lesson-${lessonId}`,handleComment)
+    const [count, setCount] = useState(0)
+    // useEffect
+    // useEffect(() => {
+    //     if (count > 3)
+    //         setCount(0)
+    // }, [count])
 
-        //cleanup
-        return () => {
-            window.removeEventListener(`lesson-${lessonId}`,handleComment)
-        }
-    }, [lessonId])
+    // useLayoutEffect
+    useLayoutEffect(() => {
+        if (count > 3)
+            setCount(0)
+    }, [count])
+
+    const handleRun = () => {
+        setCount(count + 1)
+    }
 
     return ( 
         <div>
-            <ul>
-                {lessons.map(lesson => (
-                    <li key={lesson.id}
-                        style={{color: lessonId === lesson.id ? 'red': '#fff'}}
-                        onClick={() => setLessonId(lesson.id)}
-                    >
-                        {lesson.name}
-                    </li>
-                ))}
-            </ul>
+            <h1>{count}</h1>
+            <button onClick={handleRun}>Run</button>
         </div>
      );
 }
