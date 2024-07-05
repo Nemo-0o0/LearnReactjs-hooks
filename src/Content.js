@@ -1,44 +1,47 @@
-import { useLayoutEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-
-// useEffect 
-// 1. Cap nhat lai state
-// 2. Cap nhat lai DOM 
-// 3. Render lại UI
-// 4. gọi cleanup nếu dép thay đổi
-// 5. gọi useEffect callback
-
-//useLayoutEffect
-// 1. Cập nhật lại state
-// 2. Cập nhật DOM (mutated)
-// 3. Gọi cleanup nếu deps thay đổi (sync)
-// 4. Gọi useLayoutEffect callback (sync)
-// 5. Render lại UI
- 
+// lưu các giá trị qua 1 tham chiếu bên ngoài
+// Function component 
 
 function Content() {
     
-    const [count, setCount] = useState(0)
-    // useEffect
-    // useEffect(() => {
-    //     if (count > 3)
-    //         setCount(0)
-    // }, [count])
+    const [count, setCount] = useState(60)
 
-    // useLayoutEffect
-    useLayoutEffect(() => {
-        if (count > 3)
-            setCount(0)
+    const timerId = useRef()
+    const prevCount = useRef()
+    const h1Ref = useRef()
+
+    useEffect(() => {
+        prevCount.current = count
     }, [count])
 
-    const handleRun = () => {
-        setCount(count + 1)
+
+    // Log DOMRect
+    useEffect(() => {
+        const rect = h1Ref.current.getBoundingClientRect()
+
+        console.log(rect);
+    })
+ 
+    const handleStart = () => {
+        timerId.current = setInterval(() => {
+            setCount(prevCount => prevCount - 1)
+        }, 1000)
+
+        console.log('start' , timerId.current)
     }
+    
+    const handleStop = () => {
+        clearInterval(timerId.current)
+        console.log('stop' , timerId.current)
+    }
+    console.log(count, prevCount.current)
 
     return ( 
         <div>
-            <h1>{count}</h1>
-            <button onClick={handleRun}>Run</button>
+            <h1 ref={h1Ref}>{count}</h1>
+            <button onClick={handleStart}>Start</button>
+            <button onClick={handleStop}>Stop</button>
         </div>
      );
 }

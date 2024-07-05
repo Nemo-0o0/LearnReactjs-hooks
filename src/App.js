@@ -6,17 +6,11 @@ import Content from "./Content";
 
 function App() {
 
-  const [show, setShow] = useState(false);
-
-  const handleClick = () => {
-    setShow(!show);
-  }
 
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={handleClick}>Bấm vào đi</button>
-        {show && <Content />}
+        <Content />
       </header>
     </div>
   );
