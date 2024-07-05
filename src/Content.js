@@ -35,33 +35,33 @@ import { useEffect, useState } from 'react'
 
 
 function Content() {
-
-    const [countdown, setCoundown] = useState(180)
-
-    // Set Interval
+    const [avatar, setAvatar] = useState()
 
     useEffect(() => {
-        const timeId = setInterval(() => {
-            setCoundown(prev => prev - 1)
-        }, 1000);
+        // cleanup
 
-        // Memory leak
         return () => {
-            clearInterval(timeId)
+            avatar && URL.revokeObjectURL(avatar.preview)
         }
-    },[])
+    }, [avatar])
 
-    // Set TimeOut
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         setCoundown(countdown -1)
-    //     }, 1000);
-    // },[countdown])
+    const handlePreviewAvatar = (e) => {
+        const file = e.target.files[0]
 
+        file.preview = URL.createObjectURL(file)
+
+        setAvatar(file)
+    }
 
     return ( 
         <div>
-            <h1>{countdown}</h1>
+            <input 
+            type='file'
+            onChange={handlePreviewAvatar}
+            />
+            {avatar && (
+                <img src={avatar.preview} alt="" width='80%' />
+            )}
         </div>
      );
 }
