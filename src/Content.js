@@ -31,31 +31,37 @@ import { useEffect, useState } from 'react'
 //----------------------------------------
 // 1. Callback luon duoc goi sau khi component mounted
 // 2. Cleanup Function luon duoc goi truoc khi component unmouted
+// 3. Cleanup Function luon duoc goi truoc khi callback duoc goi (tru lan mounted)
 
 
 function Content() {
 
-    const [width, setWidth] = useState(window.innerWidth)
+    const [countdown, setCoundown] = useState(180)
+
+    // Set Interval
 
     useEffect(() => {
+        const timeId = setInterval(() => {
+            setCoundown(prev => prev - 1)
+        }, 1000);
 
-        const handleResize = () => {
-            setWidth(window.innerWidth)
-            console.log('handleResize')
-        }
-
-        window.addEventListener('resize', handleResize)
-
+        // Memory leak
         return () => {
-            window.removeEventListener('resize', handleResize)
-            console.log('cleanup')
+            clearInterval(timeId)
         }
+    },[])
 
-    }, [])
+    // Set TimeOut
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setCoundown(countdown -1)
+    //     }, 1000);
+    // },[countdown])
+
 
     return ( 
         <div>
-           <h1>{width}</h1>
+            <h1>{countdown}</h1>
         </div>
      );
 }
