@@ -33,72 +33,29 @@ import { useEffect, useState } from 'react'
 // 2. Cleanup Function luon duoc goi truoc khi component unmouted
 
 
-const tabs = ['posts', 'comments','albums'];
 function Content() {
 
-    const [posts, setPosts] = useState([])
-    const [type, setType] = useState('posts')
-    const [showGoToTop, setShowGoToTop] = useState(false)
-
-    console.log(type)
-
-    useEffect(() => {
-        fetch(`https://jsonplaceholder.typicode.com/${type}`)
-            .then(res => res.json())
-            .then(posts => {
-                setPosts(posts)
-            })
-    }, [type])
+    const [width, setWidth] = useState(window.innerWidth)
 
     useEffect(() => {
 
-        const handleScroll = () => {
-            console.log(window.scrollY)
-            if (window.scrollY >= 200) {
-                // show
-                setShowGoToTop(true)
-                console.log('set State')
-            } else {
-                // hiden
-                setShowGoToTop(false)
-                
-                
-            }
-
-            // setShowGoToTop(window.scrollY >= 200)
-            // có thể dùng cách này thay cho If else
+        const handleResize = () => {
+            setWidth(window.innerWidth)
+            console.log('handleResize')
         }
 
-        window.addEventListener('scroll', handleScroll)
+        window.addEventListener('resize', handleResize)
 
-        //CleanUp function
         return () => {
-            console.log('Umounting....')
-            window.removeEventListener('scroll', handleScroll)
+            window.removeEventListener('resize', handleResize)
+            console.log('cleanup')
         }
 
     }, [])
 
     return ( 
         <div>
-            {tabs.map(tab => (
-                <button 
-                key={tab}
-                style={type === tab ? {color: "#000", background: 'red'} : {}}
-                onClick={() => setType(tab)}
-                >{tab}
-                </button>
-            ))}
-            <ul>
-                {posts.map(post => (
-                    <li key={post.id}>{post.title || post.name}</li>
-                ))}
-            </ul>
-            {showGoToTop && (
-                <button style={{position: 'fixed', right: 20, bottom:20, background: 'red'}}>
-                   Go To Top 
-                </button>
-            )}
+           <h1>{width}</h1>
         </div>
      );
 }
