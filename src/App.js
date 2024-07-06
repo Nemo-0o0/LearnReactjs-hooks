@@ -1,30 +1,25 @@
-import { useState, memo } from "react";
+import { useCallback, useState } from "react";
 import "./App.css";
 import Content from "./Content";
 
 // 1. memo() -> Higher Order Component (HOC)
 // 2. usCallback()
-
-// Hooks
-// HOC
-// Render props
+    // - Render types
+    // - React memo()
 
 function App() {
+  const [count, setCount] = useState(0);
 
-  const [count, setCount] = useState(0)
+  const handleClick = useCallback(() => {
+    setCount(prev => prev + 1);
+  }, [])
 
-  const handleClick = () => {
-      setCount(count + 1)
-  }
-
-   return ( 
-       <div className="App-header"> 
-       <Content count={count}/>
-           <h1>{count}</h1>
-           <button onClick={handleClick}>Click me</button>
-       </div>
-    );
-
+  return (
+    <div className="App-header">
+      <Content onIncrease={handleClick} />
+      <h1>{count}</h1>
+    </div>
+  );
 }
 
 export default App;
