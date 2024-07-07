@@ -1,32 +1,32 @@
+import { useEffect } from 'react';
 import './App.css'
-import { useStore , actions} from './store';
+import { useRef } from 'react';
+import Video from './Videos';
 
 function App() {
+  const videoRef = useRef()
 
-  const [state, dispatch] = useStore()
-  const { todos, todoInput } = state
+  useEffect(() => {
+    console.log(videoRef.current)
+  })
 
-  const handleAdd = () => {
-    dispatch(actions.addTodo(todoInput))
+  const handlePlay = () => {
+    // console.log(videoRef.current.remove())
+
+    videoRef.current.play()
   }
 
-  console.log(todos)
-
-  console.log('todoInput:', todoInput);
+  const handlePause = () => {
+    videoRef.current.pause()
+  }
 
   return ( 
     <div className="App-header"> 
-      <input
-        value={todoInput}
-        placeholder='Enter todo'
-        onChange={e => {
-          dispatch(actions.setTodoInput(e.target.value))
-        }}
-      />
-      <button onClick={handleAdd}>Click</button>
-      {todos.map((todo, index) => ( 
-        <li key={index}>{todo}</li>
-      ))}
+     <Video ref={videoRef}/>
+     <div style={{display: 'flex'}}>
+      <button onClick={handlePlay}>Play</button>
+      <button onClick={handlePause}>Pause</button>
+     </div>
     </div>
    );
 }
